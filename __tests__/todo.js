@@ -24,14 +24,45 @@ afterAll( async () => {
 // - DATA FORMAT  ( JSON, HTML, XML etc..)
 // - DATA         ( Object itself )
 
-test("get /", async () => {
-   const result = await supertest(server).get("/")
-   // STATUS CODE
-   expect(result.statusCode).toBe(200)
-   // FORMAT ( MIME Type )
-   expect(result.type).toBe("application/json")
-   // RESPONSE DATA
-   expect(result.body.message).toBe("Welcome to ToDo")
-   expect(result.body.message).toBeTruthy()
-   expect(result.body.message).toBeDefined()
-})
+describe( "ToDo testing: " , () => {
+
+   // INITIAL TEST OF SERVER
+   test("get /", async () => {
+      const result = await supertest(server).get("/")
+      // STATUS CODE
+      expect(result.statusCode).toBe(200)
+      // FORMAT ( MIME Type )
+      expect(result.type).toBe("application/json")
+      // RESPONSE DATA
+      expect(result.body.message).toBe("Welcome to ToDo")
+      expect(result.body.message).toBeTruthy()
+      expect(result.body.message).toBeDefined()
+   })
+
+   // GET ALL ITEMS
+   it("get /todo", async () => {
+      const res = await supertest(server).get("/todo")
+      // STATUS CODE
+      expect(res.statusCode).toBe(200)
+      // MIME TYPE
+      expect(res.type).toBe("application/json")
+      // DATA
+      expect(res.body.length).toBeGreaterThanOrEqual(4)   // data/seeds
+      expect(res.body[0].chore).toBe("Dishes")  // check first record
+   })
+
+   it("Post/Create a todo", async ()=> {
+      const res = await supertest(server)
+         .post("/todo")
+         .send( { chore: "Water Plants" })
+
+      expect(res.statusCode).toBe(201)
+      expect(res.type).toBe("application/json")
+      expect(res.body.chore).toBe("Water Plants")
+      expect(res.body.id).toBeDefined()    // won't know exact {id} returned
+   })
+
+
+
+
+})//describe()

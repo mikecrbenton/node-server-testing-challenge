@@ -11,6 +11,16 @@ router.get("/", async (req, res, next) => {
 	}
 })
 
+router.post("/", async(req,res,next) => {
+   try{
+      console.log(req.body)
+      const todo = await Todo.create(req.body)
+      res.status(201).json(todo)
+   }catch(err) {
+      next(err)
+   }
+})
+
 
 
 //==============================
