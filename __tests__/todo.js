@@ -51,7 +51,7 @@ describe( "ToDo testing: " , () => {
       expect(res.body[0].chore).toBe("Dishes")  // check first record
    })
 
-   it("Post/Create a todo", async ()=> {
+   it("Post a todo", async ()=> {
       const res = await supertest(server)
          .post("/todo")
          .send( { chore: "Water Plants" })
@@ -62,7 +62,12 @@ describe( "ToDo testing: " , () => {
       expect(res.body.id).toBeDefined()    // won't know exact {id} returned
    })
 
+   it("Delete a todo", async ()=> {
+      const res = await supertest(server)
+         .delete("/todo/4")
 
-
+      expect(res.statusCode).toBe(200)
+      expect(res.body.removed).toBe(1)
+   })
 
 })//describe()
