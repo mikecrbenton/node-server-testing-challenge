@@ -3,6 +3,7 @@ const Todo = require("./todo-model")
 const router = express.Router()
 //=============================
 
+// GET ALL
 router.get("/", async (req, res, next) => {
 	try {
 		res.json( await Todo.getAll() )
@@ -11,6 +12,24 @@ router.get("/", async (req, res, next) => {
 	}
 })
 
+// GET BY ID
+router.get('/:id', (req, res) => {
+   const { id } = req.params;
+ 
+   Todo.findById(id)
+   .then( todo => {
+     if ( todo ) {
+       res.json( todo);
+     } else {
+       res.status(404).json({ message: 'Could not find scheme with given id.' })
+     }
+   })
+   .catch(err => {
+     res.status(500).json({ message: 'Failed to get schemes' });
+   });
+ });
+
+ // POST
 router.post("/", async(req,res,next) => {
    try{
       console.log(req.body)
@@ -21,6 +40,7 @@ router.post("/", async(req,res,next) => {
    }
 })
 
+// DELETE
 router.delete('/:id', (req, res) => {
    const { id } = req.params;
  
